@@ -2,7 +2,7 @@
 # user build settings
 
 SET(TRACE TRUE)
-SET(HAVE_G2O FALSE) 
+SET(HAVE_G2O TRUE) # FALSE  
 SET(USE_ROS TRUE) # Set FALSE if you want to build this package without Catkin
 SET(DEBUG_OUTPUT FALSE) # Only relevant if build without ROS
 
@@ -41,6 +41,7 @@ IF(CMAKE_COMPILER_IS_GNUCC)
 ELSE()
   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 ENDIF()
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fpermissive -w")
 SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS} -O3 -fsee -fomit-frame-pointer -fno-signed-zeros -fno-math-errno -funroll-loops")
 
 # Add plain cmake packages 
@@ -109,6 +110,7 @@ LIST(APPEND SOURCEFILES
 
 # Add g2o if available
 IF(HAVE_G2O)
+  set(G2O_ROOT "/home/davidz/work/3rdlibs/g2o")
   FIND_PACKAGE(G2O REQUIRED)
   INCLUDE_DIRECTORIES(
     ${G2O_INCLUDE_DIR}

@@ -42,7 +42,7 @@ def evaluate_dataset(trace_dir):
     param = yaml.load(open(os.path.join(trace_dir, 'dataset_params.yaml'), 'r'))
     if param['dataset_is_blender']:
         analyse_depth.analyse_depth(trace_dir)
-        analyse_depth.analyse_depth_over_time(trace_dir)
+        # analyse_depth.analyse_depth_over_time(trace_dir)
 
 
 if __name__=="__main__":

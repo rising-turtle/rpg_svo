@@ -188,6 +188,7 @@ bool Reprojector::reprojectCell(Cell& cell, FramePtr frame)
 
     if(matcher_.ref_ftr_->type == Feature::EDGELET)
     {
+      // printf("what? ref_ftr->type = Feature::EDGELET\n");
       new_feature->type = Feature::EDGELET;
       new_feature->grad = matcher_.A_cur_ref_*matcher_.ref_ftr_->grad;
       new_feature->grad.normalize();
