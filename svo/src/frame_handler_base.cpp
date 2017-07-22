@@ -71,6 +71,7 @@ FrameHandlerBase::FrameHandlerBase() :
   g_permon->addLog("n_candidates");
   g_permon->addLog("dropout");
   g_permon->init(Config::traceName(), Config::traceDir());
+  SVO_INFO_STREAM("SVO Performance Monitor Initialized!");
 #endif
 
   SVO_INFO_STREAM("SVO initialized");

@@ -60,6 +60,12 @@ public:
       const cv::Mat& img,
       const double timestamp);
 
+  /// Prior pose operation 
+ void addIncPrior(Sophus::SE3); 
+ void setPrior();
+ bool prior_ready_; 
+ Sophus::SE3 prior_pose_;
+
 protected:
   vk::AbstractCamera* cam_;                     //!< Camera model, can be ATAN, Pinhole or Ocam (see vikit).
   Reprojector reprojector_;                     //!< Projects points from other keyframes into the current frame

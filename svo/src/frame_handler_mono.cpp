@@ -34,7 +34,8 @@ FrameHandlerMono::FrameHandlerMono(vk::AbstractCamera* cam) :
   FrameHandlerBase(),
   cam_(cam),
   reprojector_(cam_, map_),
-  depth_filter_(NULL)
+  depth_filter_(NULL),
+  prior_ready_(false)
 {
   initialize();
 }
@@ -53,6 +54,31 @@ void FrameHandlerMono::initialize()
 FrameHandlerMono::~FrameHandlerMono()
 {
   delete depth_filter_;
+}
+
+void FrameHandlerMono::addIncPrior(Sophus::SE3 inc)
+{
+	if(stage_ != STAGE_DEFAULT_FRAME && stage_!= STAGE_RELOCALIZING)
+	{
+		SVO_WARN_STREAM("Initialization is not ready addPrior() should be later!");
+		return; 
+	}
+
+	Sophus::SE3 T_wf = last_frame_->T_f_w_.inverse() * inc; 
+	prior_pose_ = T_wf.inverse(); 
+	prior_ready_ = true; 
+	return ; 
+}
+
+void FrameHandlerMono::setPrior()
+{
+	if(prior_ready_)
+	{
+		new_frame_->T_f_w_ = prior_pose_; 
+		prior_ready_ = false; 
+	}else
+		new_frame_->T_f_w_ = last_frame_->T_f_w_; 
+	return ; 
 }
 
 void FrameHandlerMono::addImage(const cv::Mat& img, const double timestamp)
@@ -130,7 +156,8 @@ FrameHandlerBase::UpdateResult FrameHandlerMono::processSecondFrame()
 FrameHandlerBase::UpdateResult FrameHandlerMono::processFrame()
 {
   // Set initial pose TODO use prior
-  new_frame_->T_f_w_ = last_frame_->T_f_w_;
+  // new_frame_->T_f_w_ = last_frame_->T_f_w_;
+  setPrior();
 
   // sparse image align
   SVO_START_TIMER("sparse_img_align");
